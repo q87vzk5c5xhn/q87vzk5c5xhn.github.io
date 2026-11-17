@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>91看页面版-网页观看板块与栏目指南</title>
+<meta name="description" content="91看页面版聚焦网页观看场景，整理频道入口、栏目更新、体验指南与播放问题排查，按日期核对板块变化与用户反馈，适合在浏览器中直接浏览使用。">
+<meta name="keywords" content="91看页面版">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f2540'/%3E%3Crect x='12' y='18' width='40' height='28' rx='4' fill='%23e8b04b'/%3E%3Cpolygon points='28,26 28,38 39,32' fill='%230f2540'/%3E%3C/svg%3E">
+<style>
+:root{
+  --navy:#0f2540;
+  --navy-2:#173556;
+  --paper:#f5f1e8;
+  --paper-2:#fffdf7;
+  --ink:#1c2733;
+  --ink-soft:#4a5766;
+  --gold:#c8912f;
+  --gold-soft:#f0d79a;
+  --teal:#2f6f6a;
+  --line:#d9d2c2;
+  --radius:10px;
+  --shadow:0 2px 10px rgba(15,37,64,.08);
+  --font:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:var(--font);
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.75;
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;}
+a{color:var(--navy-2);text-decoration:none;}
+a:hover{text-decoration:underline;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:4px;}
+.wrap{width:min(1180px,94vw);margin:0 auto;}
+.skip{position:absolute;left:-9999px;top:0;background:var(--gold);color:var(--navy);padding:.6em 1em;z-index:200;}
+.skip:focus{left:8px;top:8px;}
+/* sticky stack */
+.sticky-stack{position:sticky;top:0;z-index:100;}
+.announce{
+  background:var(--navy);
+  color:#f2e9d4;
+  font-size:.86rem;
+  padding:.45em 0;
+  border-bottom:1px solid rgba(232,176,75,.35);
+}
+.announce .wrap{display:flex;gap:.8em;align-items:center;flex-wrap:wrap;}
+.announce .tag{
+  background:var(--gold);
+  color:var(--navy);
+  font-weight:700;
+  padding:.05em .55em;
+  border-radius:3px;
+  font-size:.8rem;
+  letter-spacing:.02em;
+  white-space:nowrap;
+}
+.announce a{color:var(--gold-soft);text-decoration:underline;text-underline-offset:3px;}
+header.site{
+  background:var(--paper-2);
+  border-bottom:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+.head-bar{
+  display:flex;align-items:center;gap:1.1em;
+  padding:.7em 0;flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:.55em;font-weight:800;font-size:1.16rem;color:var(--navy);letter-spacing:.01em;}
+.brand:hover{text-decoration:none;}
+.brand .mark{width:38px;height:38px;flex:0 0 38px;}
+nav.main-nav{margin-left:auto;}
+nav.main-nav ul{display:flex;gap:.2em;list-style:none;margin:0;padding:0;flex-wrap:wrap;}
+nav.main-nav a{
+  display:block;padding:.45em .7em;border-radius:6px;color:var(--ink-soft);
+  font-size:.92rem;font-weight:600;
+}
+nav.main-nav a:hover{background:var(--paper);color:var(--navy);text-decoration:none;}
+nav.main-nav a.active{color:var(--navy);background:var(--gold-soft);}
+.head-actions{display:flex;align-items:center;gap:.5em;}
+.search-box{position:relative;display:flex;align-items:center;}
+.search-box input{
+  width:180px;padding:.45em .7em .45em 2em;border:1px solid var(--line);
+  border-radius:20px;background:var(--paper);font-size:.88rem;font-family:inherit;color:var(--ink);
+}
+.search-box svg{position:absolute;left:.6em;width:15px;height:15px;stroke:var(--ink-soft);fill:none;stroke-width:2;}
+.search-result{
+  position:absolute;top:calc(100% + 6px);right:0;width:260px;background:#fff;
+  border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);
+  padding:.5em;font-size:.85rem;display:none;max-height:280px;overflow:auto;z-index:120;
+}
+.search-result.show{display:block;}
+.search-result p{margin:.2em 0;}
+.search-result a{display:block;padding:.3em .4em;border-radius:5px;color:var(--navy-2);}
+.search-result a:hover{background:var(--paper);}
+.menu-btn{
+  display:none;background:none;border:1px solid var(--line);border-radius:8px;
+  padding:.45em .6em;cursor:pointer;color:var(--navy);font-size:1rem;font-family:inherit;
+}
+/* hero */
+.hero{
+  background:linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 62%,#1e4667 100%);
+  color:#eef1f6;position:relative;overflow:hidden;
+}
+.hero .wrap{
+  display:grid;grid-template-columns:1.25fr .95fr;gap:2.4em;align-items:center;
+  padding:3em 0 3.2em;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.45em;font-size:.8rem;font-weight:700;
+  color:var(--gold-soft);letter-spacing:.08em;border:1px solid rgba(232,176,75,.5);
+  padding:.25em .7em;border-radius:20px;margin-bottom:1em;
+}
+.hero h1{
+  font-size:clamp(1.9rem,3.6vw,2.7rem);line-height:1.25;margin:0 0 .55em;
+  letter-spacing:.01em;color:#fff;
+}
+.hero .lead{font-size:1.02rem;color:#cfdae7;max-width:34em;margin:0 0 1.5em;}
+.hero .lead b{color:var(--gold-soft);font-weight:700;}
+.hero-cta{display:flex;gap:.7em;flex-wrap:wrap;}
+.btn{
+  display:inline-block;padding:.62em 1.25em;border-radius:8px;font-weight:700;font-size:.94rem;
+  border:1px solid transparent;cursor:pointer;font-family:inherit;
+}
+.btn-primary{background:var(--gold);color:var(--navy);}
+.btn-primary:hover{background:#dca644;text-decoration:none;}
+.btn-ghost{background:transparent;color:#eef1f6;border-color:rgba(238,241,246,.45);}
+.btn-ghost:hover{border-color:var(--gold-soft);color:var(--gold-soft);text-decoration:none;}
+.hero-fig{position:relative;min-height:250px;}
+.hero-fig svg{width:100%;height:auto;display:block;}
+.hero-stats{display:flex;gap:1.6em;margin-top:1.7em;flex-wrap:wrap;}
+.hero-stats div{font-size:.85rem;color:#a9bccf;}
+.hero-stats strong{display:block;font-size:1.3rem;color:#fff;font-weight:800;line-height:1.3;}
+/* layout */
+.layout{
+  display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:2.2em;
+  padding:2.4em 0 3em;
+}
+main{min-width:0;}
+section.block{margin-bottom:2.6em;scroll-margin-top:118px;}
+.block-head{display:flex;align-items:baseline;gap:.7em;flex-wrap:wrap;margin-bottom:.9em;}
+.block-head h2{
+  font-size:1.32rem;margin:0;color:var(--navy);letter-spacing:.01em;
+  border-left:4px solid var(--gold);padding-left:.5em;line-height:1.3;
+}
+.block-head .sub{font-size:.82rem;color:var(--ink-soft);}
+/* overview */
+.overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.9em;}
+.overview-grid .cell{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
+  padding:.9em 1em;
+}
+.overview-grid .cell h3{margin:.1em 0 .35em;font-size:.98rem;color:var(--navy);}
+.overview-grid .cell p{margin:0;font-size:.87rem;color:var(--ink-soft);line-height:1.65;}
+.overview-grid .num{font-size:1.5rem;font-weight:800;color:var(--gold);line-height:1.1;}
+/* picks */
+.pick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1em;}
+.pick-card{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;transition:transform .18s ease,box-shadow .18s ease;
+}
+.pick-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(15,37,64,.12);}
+.pick-card img{width:100%;height:150px;object-fit:cover;}
+.pick-card .body{padding:.85em 1em 1em;}
+.pick-card h3{margin:.1em 0 .35em;font-size:1.02rem;color:var(--navy);line-height:1.4;}
+.pick-card p{margin:0 0 .6em;font-size:.86rem;color:var(--ink-soft);}
+.meta{font-size:.78rem;color:#7c8794;display:flex;gap:.8em;flex-wrap:wrap;}
+.pill{display:inline-block;font-size:.74rem;font-weight:700;padding:.1em .55em;border-radius:20px;background:var(--gold-soft);color:#6f4d0a;}
+.pill.teal{background:#d5e8e5;color:#1f4f4b;}
+/* latest compact list */
+.latest-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);}
+.latest-list li{
+  display:grid;grid-template-columns:88px 1fr;gap:1em;padding:.7em 0;border-bottom:1px solid var(--line);
+  font-size:.92rem;
+}
+.latest-list time{color:var(--gold);font-weight:700;font-size:.82rem;}
+.latest-list a{font-weight:600;color:var(--ink);}
+.latest-list a:hover{color:var(--navy);}
+.latest-list .desc{display:block;font-size:.82rem;color:var(--ink-soft);font-weight:400;margin-top:.1em;}
+/* channels */
+.channel-tags{display:flex;flex-wrap:wrap;gap:.55em;}
+.channel-tags a{
+  display:inline-flex;align-items:center;gap:.35em;background:var(--paper-2);
+  border:1px solid var(--line);border-radius:8px;padding:.45em .8em;font-size:.9rem;
+  font-weight:600;color:var(--navy-2);transition:border-color .15s,background .15s;
+}
+.channel-tags a:hover{border-color:var(--gold);background:#fdf6e6;text-decoration:none;}
+.channel-tags .count{font-size:.74rem;color:#8a949f;font-weight:500;}
+/* analysis */
+.analysis{border-top:1px solid var(--line);padding-top:1.1em;}
+.analysis p{margin:0 0 1em;}
+.analysis h3{font-size:1.08rem;color:var(--navy);margin:1.4em 0 .45em;}
+.judge-box{
+  background:#fbf6e9;border:1px solid var(--gold-soft);border-radius:var(--radius);
+  padding:1em 1.15em;margin:1em 0 1.3em;
+}
+.judge-box strong{color:#7a5410;}
+.judge-box ul{margin:.4em 0 0;padding-left:1.2em;font-size:.9rem;color:var(--ink-soft);}
+.compare{width:100%;border-collapse:collapse;font-size:.87rem;margin:.9em 0 1.3em;background:var(--paper-2);}
+.compare th,.compare td{border:1px solid var(--line);padding:.55em .7em;text-align:left;vertical-align:top;}
+.compare th{background:#ece5d5;color:var(--navy);font-weight:700;}
+.compare td b{color:var(--navy);}
+blockquote.quote{
+  margin:1.3em 0;padding:.9em 1.2em;border-left:4px solid var(--teal);
+  background:#eef5f3;color:#244c49;font-size:.94rem;border-radius:0 8px 8px 0;
+}
+blockquote.quote cite{display:block;font-size:.78rem;color:#5d7a76;font-style:normal;margin-top:.4em;}
+/* guide steps */
+.steps{counter-reset:step;list-style:none;margin:0;padding:0;display:grid;gap:.8em;}
+.steps li{
+  counter-increment:step;position:relative;background:var(--paper-2);
+  border:1px solid var(--line);border-radius:var(--radius);padding:.85em 1em .85em 3.4em;font-size:.92rem;
+}
+.steps li::before{
+  content:counter(step);position:absolute;left:.9em;top:.85em;width:1.8em;height:1.8em;
+  background:var(--navy);color:var(--gold-soft);border-radius:50%;display:grid;place-items:center;
+  font-weight:800;font-size:.86rem;
+}
+.steps li strong{display:block;color:var(--navy);margin-bottom:.15em;}
+/* faq */
+details.faq{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
+  margin-bottom:.65em;padding:.15em .2em;
+}
+details.faq summary{
+  cursor:pointer;padding:.75em 1em;font-weight:700;color:var(--navy);font-size:.96rem;
+  list-style:none;position:relative;padding-right:2.4em;
+}
+details.faq summary::-webkit-details-marker{display:none;}
+details.faq summary::after{
+  content:"+";position:absolute;right:.9em;top:50%;transform:translateY(-50%);
+  color:var(--gold);font-size:1.2rem;font-weight:700;
+}
+details.faq[open] summary::after{content:"–";}
+details.faq .answer{padding:0 1em .9em;font-size:.9rem;color:var(--ink-soft);}
+details.faq .answer p{margin:.2em 0 .5em;}
+details.faq .answer p:last-child{margin-bottom:0;}
+/* comments */
+.comments{display:grid;gap:.8em;}
+.comment{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
+  padding:.85em 1em;font-size:.9rem;
+}
+.comment .who{display:flex;align-items:center;gap:.6em;margin-bottom:.3em;}
+.avatar{
+  width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--gold-soft);
+  display:grid;place-items:center;font-weight:700;font-size:.8rem;flex:0 0 30px;
+}
+.comment .name{font-weight:700;color:var(--navy);font-size:.86rem;}
+.comment .when{font-size:.76rem;color:#8a949f;}
+.comment p{margin:.2em 0 0;color:var(--ink-soft);}
+/* news list */
+.news-list{list-style:none;margin:0;padding:0;}
+.news-list li{padding:.65em 0;border-bottom:1px dashed var(--line);font-size:.91rem;}
+.news-list li:last-child{border-bottom:none;}
+.news-list .src{font-size:.76rem;color:#8a949f;margin-left:.5em;}
+.news-list a{color:var(--ink);font-weight:600;}
+/* recommend tags */
+.rec-tags{display:flex;flex-wrap:wrap;gap:.5em;}
+.rec-tags a{
+  background:#eef5f3;border:1px solid #cfe2df;color:#235955;border-radius:20px;
+  padding:.32em .8em;font-size:.85rem;font-weight:600;
+}
+.rec-tags a:hover{background:#d5e8e5;text-decoration:none;}
+/* ranking */
+.rank{list-style:none;margin:0;padding:0;counter-reset:rank;}
+.rank li{
+  counter-increment:rank;display:grid;grid-template-columns:2.2em 1fr auto;gap:.7em;
+  align-items:center;padding:.6em .2em;border-bottom:1px solid var(--line);font-size:.92rem;
+}
+.rank li::before{
+  content:counter(rank);display:grid;place-items:center;width:1.7em;height:1.7em;
+  border-radius:6px;background:#ece5d5;color:var(--navy);font-weight:800;font-size:.82rem;
+}
+.rank li:nth-child(1)::before{background:var(--gold);color:var(--navy);}
+.rank li:nth-child(2)::before{background:var(--gold-soft);color:#6f4d0a;}
+.rank .score{font-size:.78rem;color:#8a949f;}
+/* sidebar */
+aside.sidebar{position:relative;}
+.side-inner{position:sticky;top:118px;display:grid;gap:1.1em;}
+.side-card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);padding:1em 1.1em;}
+.side-card h2{font-size:.98rem;margin:0 0 .6em;color:var(--navy);border-left:3px solid var(--gold);padding-left:.5em;line-height:1.35;}
+.side-nav ul{list-style:none;margin:0;padding:0;display:grid;gap:.1em;}
+.side-nav a{display:block;padding:.35em .6em;border-radius:6px;font-size:.86rem;color:var(--ink-soft);border-left:2px solid transparent;}
+.side-nav a:hover{background:var(--paper);color:var(--navy);text-decoration:none;}
+.side-nav a.active{background:#fbf6e9;border-left-color:var(--gold);color:var(--navy);font-weight:700;}
+.side-fact{font-size:.85rem;color:var(--ink-soft);margin:0 0 .5em;}
+.side-fact b{color:var(--navy);}
+.side-links{list-style:none;margin:0;padding:0;font-size:.86rem;}
+.side-links li{margin-bottom:.4em;}
+.side-links li:last-child{margin-bottom:0;}
+/* footer */
+footer.site{background:var(--navy);color:#c3d0dd;margin-top:1em;padding:2.4em 0 1.2em;font-size:.88rem;}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:1.8em;}
+.foot-brand .brand{color:#fff;margin-bottom:.6em;}
+.foot-brand p{margin:.2em 0;color:#9fb2c4;line-height:1.7;font-size:.85rem;}
+.foot-col h3{font-size:.9rem;color:var(--gold-soft);margin:0 0 .6em;letter-spacing:.03em;}
+.foot-col ul{list-style:none;margin:0;padding:0;}
+.foot-col li{margin-bottom:.35em;}
+.foot-col a{color:#c3d0dd;font-size:.85rem;}
+.foot-col a:hover{color:var(--gold-soft);}
+.foot-note{border-top:1px solid rgba(200,145,47,.25);margin-top:1.8em;padding-top:1em;font-size:.78rem;color:#8fa3b6;display:flex;justify-content:space-between;gap:1em;flex-wrap:wrap;}
+/* back to top */
+#toTop{
+  position:fixed;right:18px;bottom:22px;width:44px;height:44px;border-radius:50%;
+  background:var(--navy);color:var(--gold-soft);border:1px solid var(--gold);
+  display:none;place-items:center;cursor:pointer;z-index:90;font-size:1.1rem;
+  box-shadow:var(--shadow);
+}
+#toTop.show{display:grid;}
+/* responsive */
+@media(max-width:960px){
+  .hero .wrap{grid-template-columns:1fr;gap:1.6em;padding:2.2em 0;}
+  .hero-fig{order:-1;min-height:0;max-width:420px;}
+  .layout{grid-template-columns:1fr;gap:1.8em;}
+  .side-inner{position:static;}
+  .foot-grid{grid-template-columns:1fr 1fr;}
+  nav.main-nav{
+    display:none;width:100%;order:5;margin-left:0;border-top:1px solid var(--line);padding-top:.4em;
+  }
+  nav.main-nav.open{display:block;}
+  nav.main-nav ul{flex-direction:column;gap:0;}
+  .menu-btn{display:inline-block;}
+  .head-actions{margin-left:auto;}
+}
+@media(max-width:720px){
+  .overview-grid{grid-template-columns:1fr;}
+  .pick-grid{grid-template-columns:1fr;}
+  .latest-list li{grid-template-columns:72px 1fr;}
+  .search-box input{width:130px;}
+  .foot-grid{grid-template-columns:1fr;}
+  .hero-stats{gap:1.1em;}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *{transition:none!important;animation:none!important;}
+  .pick-card:hover{transform:none;}
+}
+</style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+<a class="skip" href="/#main">跳到正文</a>
+
+<div class="sticky-stack">
+  <div class="announce" role="region" aria-label="站点公告">
+    <div class="wrap">
+      <span class="tag">更新</span>
+      <span>11月6日频道表调整：「港剧修复专区」并入「华语剧场」，旧入口30天后失效；<a href="/#latest">查看全部条目变化</a></span>
+    </div>
+  </div>
+  <header class="site">
+    <div class="wrap head-bar">
+      <a class="brand" href="/#hero">
+        <svg class="mark" viewBox="0 0 64 64" role="img" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="#0f2540"/>
+          <rect x="11" y="17" width="42" height="30" rx="4" fill="#e8b04b"/>
+          <polygon points="28,25 28,39 40,32" fill="#0f2540"/>
+          <rect x="11" y="50" width="42" height="3" rx="1.5" fill="#2f6f6a"/>
+        </svg>
+        <span>91看页面版</span>
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mainNav">菜单 ▾</button>
+      <nav class="main-nav" id="mainNav" aria-label="主题导航">
+        <ul>
+          <li><a href="/#overview">板块概览</a></li>
+          <li><a href="/#picks">精选推荐</a></li>
+          <li><a href="/#latest">最新更新</a></li>
+          <li><a href="/#channels">频道入口</a></li>
+          <li><a href="/#analysis">深度解析</a></li>
+          <li><a href="/#guide">体验指南</a></li>
+          <li><a href="/#faq">常见问答</a></li>
+        </ul>
+      </nav>
+      <div class="head-actions">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg>
+          <input type="search" id="siteSearch" placeholder="搜索栏目或条目" aria-label="站内搜索">
+          <div class="search-result" id="searchResult" role="status" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+
+<section class="hero" id="hero">
+  <div class="wrap">
+    <div>
+      <span class="hero-badge">网页观看 · 栏目导航</span>
+      <h1>91看页面版</h1>
+      <p class="lead">把散在各处的频道、剧集与综艺条目收进同一张页面表里。按板块索引，按日期核对更新，<b>11月6日</b>起频道合并后的入口变化也能在这里查到出处。</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="/#channels">进入频道表</a>
+        <a class="btn btn-ghost" href="/#latest">看本周更新</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>36</strong>个在列频道</div>
+        <div><strong>214</strong>条可检索条目</div>
+        <div><strong>11·06</strong>最近一次表结构调整</div>
+      </div>
+    </div>
+    <div class="hero-fig" aria-hidden="true">
+      <svg viewBox="0 0 420 300" role="presentation">
+        <defs>
+          <linearGradient id="scr" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#2a5578"/>
+            <stop offset="1" stop-color="#123049"/>
+          </linearGradient>
+        </defs>
+        <rect x="18" y="30" width="330" height="196" rx="12" fill="url(#scr)" stroke="#3d6a8f"/>
+        <rect x="34" y="48" width="298" height="16" rx="4" fill="#1b3c58"/>
+        <circle cx="44" cy="56" r="3.5" fill="#e8b04b"/>
+        <circle cx="56" cy="56" r="3.5" fill="#2f6f6a"/>
+        <circle cx="68" cy="56" r="3.5" fill="#8fa3b6"/>
+        <rect x="34" y="76" width="132" height="82" rx="6" fill="#e8b04b" opacity=".9"/>
+        <polygon points="88,102 88,132 116,117" fill="#123049"/>
+        <rect x="176" y="76" width="70" height="38" rx="5" fill="#2f6f6a"/>
+        <rect x="254" y="76" width="78" height="38" rx="5" fill="#3d6a8f"/>
+        <rect x="176" y="120" width="156" height="10" rx="4" fill="#8fa3b6" opacity=".55"/>
+        <rect x="176" y="138" width="120" height="10" rx="4" fill="#8fa3b6" opacity=".35"/>
+        <rect x="34" y="170" width="298" height="40" rx="6" fill="#0c2338"/>
+        <rect x="46" y="182" width="58" height="16" rx="8" fill="#e8b04b"/>
+        <rect x="116" y="182" width="58" height="16" rx="8" fill="#2f6f6a"/>
+        <rect x="186" y="182" width="58" height="16" rx="8" fill="#3d6a8f"/>
+        <rect x="256" y="182" width="58" height="16" rx="8" fill="#5a7d99"/>
+        <rect x="330" y="64" width="72" height="120" rx="8" fill="#1b3c58" stroke="#3d6a8f"/>
+        <rect x="340" y="76" width="52" height="8" rx="4" fill="#e8b04b"/>
+        <rect x="340" y="92" width="40" height="7" rx="3.5" fill="#8fa3b6"/>
+        <rect x="340" y="106" width="46" height="7" rx="3.5" fill="#8fa3b6"/>
+        <rect x="340" y="120" width="36" height="7" rx="3.5" fill="#8fa3b6"/>
+        <circle cx="366" cy="160" r="12" fill="#2f6f6a"/>
+        <path d="M361 160 l4 4 l7 -8" stroke="#e8b04b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <rect x="64" y="240" width="256" height="10" rx="5" fill="#1b3c58"/>
+        <circle cx="92" cy="276" r="6" fill="#e8b04b"/>
+        <circle cx="180" cy="276" r="6" fill="#3d6a8f"/>
+        <circle cx="268" cy="276" r="6" fill="#2f6f6a"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="wrap layout" id="main">
+  <main>
+
+    <section class="block" id="overview">
+      <div class="block-head">
+        <h2>板块概览：网页观看页由什么组成</h2>
+        <span class="sub">先认清结构，再找入口</span>
+      </div>
+      <div class="overview-grid">
+        <div class="cell">
+          <div class="num">36</div>
+          <h3>频道栏目</h3>
+          <p>华语剧场、港剧修复专区、日韩综艺、纪录片纪行等，按地区与题材两层切分，11月6日合并后为36个。</p>
+        </div>
+        <div class="cell">
+          <div class="num">214</div>
+          <h3>可检索条目</h3>
+          <p>含剧集单季、综艺整季、短片合集三类卡片，每条都有首播年份与最近修订日期标注。</p>
+        </div>
+        <div class="cell">
+          <div class="num">3</div>
+          <h3>更新节奏</h3>
+          <p>工作日每日一更、周末双更、整季完结后做一次表内回填，回填记录写在最新更新板块。</p>
+        </div>
+        <div class="cell">
+          <div class="num">1</div>
+          <h3>主体阅读区</h3>
+          <p>深度解析是唯一长阅读区，其余板块承担入口、索引、问答和反馈，功能不叠加。</p>
+        </div>
+        <div class="cell">
+          <div class="num">7</div>
+          <h3>固定锚点</h3>
+          <p>概览、精选、更新、频道、解析、指南、问答七个位置为常驻入口，导航高亮随滚动切换。</p>
+        </div>
+        <div class="cell">
+          <div class="num">2</div>
+          <h3>互动栏目</h3>
+          <p>用户评论与本周评分榜开放投稿，评分以11月8日前集结的条目为准，不追溯修改。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="picks">
+      <div class="block-head">
+        <h2>精选推荐：四个值得先看的入口</h2>
+        <span class="sub">按题材与口碑各取一条</span>
+      </div>
+      <div class="pick-grid">
+        <article class="pick-card">
+          <img src="https://picsum.photos/seed/91kan-huaju/560/300" width="560" height="300" loading="lazy" alt="华语剧场频道卡片封面，深蓝色调的城市夜景">
+          <div class="body">
+            <span class="pill">华语剧场</span>
+            <h3>《雾港十年》第二季</h3>
+            <p>11月7日上线第5集，修复版同时放出第1至第4集的字幕时间轴校正说明。</p>
+            <div class="meta"><span>2026-11-07</span><span>共12集</span></div>
+          </div>
+        </article>
+        <article class="pick-card">
+          <img src="https://picsum.photos/seed/91kan-gangju/560/300" width="560" height="300" loading="lazy" alt="港剧修复专区封面，老式霓虹招牌与街道">
+          <div class="body">
+            <span class="pill teal">港剧修复专区</span>
+            <h3>《庙街旧事》1998修复版</h3>
+            <p>4K扫描后保留原胶片颗粒，11月6日起并入华语剧场，旧链接跳转保留30天。</p>
+            <div class="meta"><span>2026-11-06</span><span>共25集</span></div>
+          </div>
+        </article>
+        <article class="pick-card">
+          <img src="https://picsum.photos/seed/91kan-zongyi/560/300" width="560" height="300" loading="lazy" alt="日韩综艺频道封面，舞台灯光与镜头">
+          <div class="body">
+            <span class="pill">日韩综艺</span>
+            <h3>《周末厨房》第9季</h3>
+            <p>11月3日第14期上线，节目组在本周说明中回应了剪辑顺序争议，附原始录制日期。</p>
+            <div class="meta"><span>2026-11-03</span><span>第14期</span></div>
+          </div>
+        </article>
+        <article class="pick-card">
+          <img src="https://picsum.photos/seed/91kan-doc/560/300" width="560" height="300" loading="lazy" alt="纪录片纪行频道封面，山脊与云层">
+          <div class="body">
+            <span class="pill teal">纪录片纪行</span>
+            <h3>《沿着海岸线》第三集</h3>
+            <p>10月31日更新浙江段，片尾列出拍摄许可编号与三个取样点坐标，可逐条核对。</p>
+            <div class="meta"><span>2026-10-31</span><span>共8集</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" id="latest">
+      <div class="block-head">
+        <h2>最新更新：本周条目与表结构调整</h2>
+        <span class="sub">以11月8日为参照，近30天内</span>
+      </div>
+      <ul class="latest-list">
+        <li>
+          <time>11月8日</time>
+          <div><a href="/#channels">评分榜第45周结算</a><span class="desc">《雾港十年》第二季以8.7分居首，共收有效评分2143份，剔除异常样本37份。</span></div>
+        </li>
+        <li>
+          <time>11月7日</time>
+          <div><a href="/#picks">《雾港十年》第二季第5集上线</a><span class="desc">同时更新字幕时间轴校正说明，涉及第2集第18分钟处的三行对白。</span></div>
+        </li>
+        <li>
+          <time>11月6日</time>
+          <div><a href="/#channels">频道表合并：港剧修复专区并入华语剧场</a><span class="desc">专区原214条目重新挂到子分类「修复单元」，旧入口跳转保留至12月6日。</span></div>
+        </li>
+        <li>
+          <time>11月4日</time>
+          <div><a href="/#analysis">纪录片纪行增加拍摄信息栏</a><span class="desc">《沿着海岸线》各集片尾新增许可编号与取样点坐标，首批回填8集。</span></div>
+        </li>
+        <li>
+          <time>11月3日</time>
+          <div><a href="/#picks">《周末厨房》第9季第14期</a><span class="desc">节目组说明剪辑顺序，附原始录制日期10月18日与10月19日两场。</span></div>
+        </li>
+        <li>
+          <time>10月31日</time>
+          <div><a href="/#guide">播放器兼容性说明更新</a><span class="desc">补充iOS 17与Chrome 130的画中画行为差异记录，共4条实测。</span></div>
+        </li>
+        <li>
+          <time>10月29日</time>
+          <div><a href="/#faq">问答板块补充6条常见问题</a><span class="desc">集中在频道合并后的入口跳转与收藏夹同步。</span></div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="block" id="channels">
+      <div class="block-head">
+        <h2>分类入口：36个频道按题材排列</h2>
+        <span class="sub">点击进入对应板块</span>
+      </div>
+      <div class="channel-tags">
+        <a href="/#channels">华语剧场 <span class="count">42条</span></a>
+        <a href="/#channels">港剧修复专区 <span class="count">并入中</span></a>
+        <a href="/#channels">台剧轻喜剧 <span class="count">18条</span></a>
+        <a href="/#channels">日韩综艺 <span class="count">27条</span></a>
+        <a href="/#channels">日本刑侦剧 <span class="count">15条</span></a>
+        <a href="/#channels">韩国真人秀 <span class="count">21条</span></a>
+        <a href="/#channels">欧美悬疑剧 <span class="count">19条</span></a>
+        <a href="/#channels">欧美科幻合集 <span class="count">12条</span></a>
+        <a href="/#channels">纪录片纪行 <span class="count">23条</span></a>
+        <a href="/#channels">美食纪录 <span class="count">11条</span></a>
+        <a href="/#channels">动画剧场 <span class="count">26条</span></a>
+        <a href="/#channels">短片合集 <span class="count">9条</span></a>
+      </div>
+    </section>
+
+    <section class="block" id="analysis">
+      <div class="block-head">
+        <h2>深度解析：频道合并之后，入口还可靠吗</h2>
+        <span class="sub">全页唯一长阅读区</span>
+      </div>
+      <div class="analysis">
+        <p>11月6日的频道表调整，把「港剧修复专区」整体并入「华语剧场」，原专区214个条目改挂到子分类「修复单元」。这次动作看起来只是归并，实际影响的是三类入口：老收藏、外部链接、站内搜索结果。</p>
+
+        <h3>收藏夹同步滞后了多久</h3>
+        <p>从11月6日到11月8日，后台日志显示收藏夹同步完成的条目占比为63.4%，未完成的条目集中在2024年前收藏的老片。旧入口跳转保留30天，也就是到12月6日。判断入口是否可靠，可以按下面三步拆开核对。</p>
+        <div class="judge-box">
+          <strong>可核对的三个点：</strong>
+          <ul>
+            <li>跳转状态：旧链接是否返回301，还是返回带提示的中间页。</li>
+            <li>收藏位置：个人收藏里的条目指向新分类还是旧专区。</li>
+            <li>搜索命中：站内搜索输入剧名，首条结果是否落在「修复单元」。</li>
+          </ul>
+        </div>
+
+        <h3>两种说法对不上：页面说明 vs 用户实测</h3>
+        <p>页面说明写的是「同步完成」，用户侧的实测却给出不同结果。11月7日用户「阿栎」在评论区记录：收藏的《庙街旧事》点开仍指向旧专区，提示页停留约2秒后跳转。另一位用户「南岸的风」在同一天反馈《大城小事》直接命中新分类。两条记录指向同一套规则下的不同结果，差别在于收藏时间。</p>
+        <table class="compare">
+          <caption style="caption-side:top;text-align:left;font-size:.8rem;color:#8a949f;padding-bottom:.3em;">2026年11月8日抽样对照，样本量n=120</caption>
+          <thead>
+            <tr><th>收藏时间</th><th>跳转到新分类</th><th>仍需手动改收藏</th><th>页面提示</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>2026年内</td><td><b>54</b>条</td><td>3条</td><td>无</td></tr>
+            <tr><td>2025年</td><td><b>29</b>条</td><td>11条</td><td>带2秒提示页</td></tr>
+            <tr><td>2024年及以前</td><td>4条</td><td><b>19</b>条</td><td>带2秒提示页</td></tr>
+          </tbody>
+        </table>
+        <p>由此可以下一个能被反驳的判断：合并本身没有破坏条目，问题出在2024年及以前的收藏没有自动迁移。如果后续版本把旧收藏全部批量迁移，这个判断就被推翻。</p>
+
+        <h3>规则前后变化：搜索权重被重排</h3>
+        <p>10月30日的搜索规则里，剧名完全匹配排第一，频道名匹配排第二。11月6日合并后，规则加了一条：同一剧名在「修复单元」下命中时，优先展示修复版，原版下移一位。实际效果是搜《庙街旧事》，首条变成修复版，原版降到第二。对找原版的用户来说，这是后退一步；对找修复版的用户，是前进两步。<strong>权重调整影响的是排序，不影响条目是否存在。</strong></p>
+
+        <blockquote class="quote">
+          10月30日记录：搜「庙街旧事」首条为1998原版，修复版第二。<br>
+          11月6日记录：同词搜索首条为修复版，原版第二，页面右侧出现「修复单元」标签。
+          <cite>站内搜索日志，两次检索间隔7天</cite>
+        </blockquote>
+
+        <h3>推测与事实要分开写</h3>
+        <p>事实部分是：214个条目已改挂「修复单元」，旧跳转保留30天，收藏同步率63.4%。推测部分是：合并的动机可能与修复版片源集中管理有关，这一点没有公开说明，只能标为推测。用户「老片搬运工」在评论里提出另一种解释——修复版单独成区时维护成本高，合并可以少一套审核流程。两种推测都缺乏直接证据，不能当成结论往下传。</p>
+      </div>
+    </section>
+
+    <section class="block" id="guide">
+      <div class="block-head">
+        <h2>体验指南：从打开页面到找到剧集</h2>
+        <span class="sub">五步走完一次完整浏览</span>
+      </div>
+      <ol class="steps">
+        <li><strong>先看公告条</strong>公告条在页头之上，随滚动吸顶。11月6日的频道合并通知会一直显示到12月6日，点进去能到频道表。</li>
+        <li><strong>用搜索框做第一次筛选</strong>输入剧名或频道名，结果在输入框下方浮出。无结果时会提示「未找到，试试题材词」，不会留空白。</li>
+        <li><strong>频道表按题材定位</strong>36个频道分地区与题材两层。修复版内容现在统一在「华语剧场」下的「修复单元」，点标签直达。</li>
+        <li><strong>关注更新日期</strong>每条卡片都带最近修订日期。11月7日之后的条目附字幕校正说明，10月31日之后附播放器兼容性记录。</li>
+        <li><strong>收藏前确认落点</strong>2024年前的收藏可能还指向旧专区，点开若出现2秒提示页，说明需要手动改收藏。2026年内的收藏基本直接跳转。</li>
+      </ol>
+    </section>
+
+    <section class="block" id="faq">
+      <div class="block-head">
+        <h2>常见问答：入口、收藏与播放</h2>
+        <span class="sub">按被问到最多的顺序排</span>
+      </div>
+
+      <details class="faq">
+        <summary>港剧修复专区为什么找不到了？</summary>
+        <div class="answer">
+          <p>港剧修复专区在11月6日并入华语剧场，原来的214个条目改挂到子分类「修复单元」。在频道表里点「华语剧场」，再选「修复单元」即可看到全部修复版条目。</p>
+          <p>旧入口不会立刻失效，跳转保留到12月6日。期间打开旧链接会先出现提示页，约2秒后跳到新分类。</p>
+        </div>
+      </details>
+
+      <details class="faq">
+        <summary>收藏的剧集点开是旧页面，怎么办？</summary>
+        <div class="answer">
+          <p>2024年及以前收藏的条目，同步完成率偏低，11月8日抽样120条中仍有19条需要手动改收藏。做法是打开条目后重新点一次收藏，让收藏指向新分类，旧记录会被覆盖。</p>
+          <p>2026年内的收藏基本无需处理，抽样中57条有54条直接跳转成功。</p>
+        </div>
+      </details>
+
+      <details class="faq">
+        <summary>搜索剧名时修复版排在原版前面，能改吗？</summary>
+        <div class="answer">
+          <p>11月6日起搜索规则加了一条优先展示修复版，原版下移一位。目前没有提供用户侧排序开关，可以在结果里按发行年份区分：1998、2001这类早年版本是原版，修复版会带「修复单元」标签。</p>
+        </div>
+      </details>
+
+      <details class="faq">
+        <summary>《周末厨房》第14期的剪辑顺序争议是怎么回事？</summary>
+        <div class="answer">
+          <p>节目组11月3日说明，第14期把两场录制剪在一起，顺序是先10月19日场，后10月18日场。说明里附了两场的原始录制日期与现场流程单编号，争议点在于观众按播出顺序理解嘉宾关系时产生误读。</p>
+        </div>
+      </details>
+
+      <details class="faq">
+        <summary>纪录片纪行里的拍摄许可编号在哪看？</summary>
+        <div class="answer">
+          <p>《沿着海岸线》各集片尾新增拍摄信息栏，列出许可编号与三个取样点坐标，首批回填了8集。11月4日之后打开的版本都能看到，10月31日之前缓存的旧页面需要刷新一次。</p>
+        </div>
+      </details>
+
+      <details class="faq">
+        <summary>手机上播放器画中画按钮不出现？</summary>
+        <div class="answer">
+          <p>10月31日的兼容性记录显示，iOS 17下画中画按钮在Safari需要先进入全屏再退出一次才会出现；Chrome 130在安卓端则是直接位于控制条右侧第三位。两种行为差异来自浏览器自身实现，不是页面开关问题。</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="block" id="comments">
+      <div class="block-head">
+        <h2>用户评论：关于条目本身的声音</h2>
+        <span class="sub">节选自11月6日至8日的留言</span>
+      </div>
+      <div class="comments">
+        <div class="comment">
+          <div class="who"><span class="avatar">栎</span><span class="name">阿栎</span><span class="when">11月7日</span></div>
+          <p>《庙街旧事》修复版第3集第22分钟，原版里那句粤语对白在修复版被换成了普通话配音，字幕还是粤语原文，两条对不上。收藏了两年，这次跳转倒是顺利。</p>
+        </div>
+        <div class="comment">
+          <div class="who"><span class="avatar">帆</span><span class="name">南岸的风</span><span class="when">11月7日</span></div>
+          <p>合并之后《大城小事》直接命中新分类，比原来少点一次，这点改得不错。就是搜索页那个「修复单元」标签有点显眼，容易误以为是另一部剧。</p>
+        </div>
+        <div class="comment">
+          <div class="who"><span class="avatar">搬</span><span class="name">老片搬运工</span><span class="when">11月6日</span></div>
+          <p>修复版单独成区的时候其实挺好找的，合并之后要在「华语剧场」里翻到「修复单元」，路径反而长了。维护成本我理解，但找片的人不一定买账。</p>
+        </div>
+        <div class="comment">
+          <div class="who"><span class="avatar">窗</span><span class="name">窗台上的猫</span><span class="when">11月8日</span></div>
+          <p>《周末厨房》第14期那个剪辑顺序，节目组说明里写得很清楚，先19日后18日，反而比之前含糊的回应好。就是说明藏在页面底部，不太好找。</p>
+        </div>
+        <div class="comment">
+          <div class="who"><span class="avatar">岸</span><span class="name">海岸线观众</span><span class="when">11月4日</span></div>
+          <p>《沿着海岸线》第三集片尾的取样点坐标我逐个查了，两个能对上卫星图，第三个落在滩涂边缘，偏差大概百米。许可编号是真的，这个细节做得实。</p>
+        </div>
+        <div class="comment">
+          <div class="who"><span class="avatar">北</span><span class="name">北纬三十度</span><span class="when">11月6日</span></div>
+          <p>评分榜第一那部我没看完，8.7分有点高了吧。第二季第5集节奏明显拖，可能是前面几集撑起来的印象分。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="news">
+      <div class="block-head">
+        <h2>相关资讯：条目之外的三条记录</h2>
+        <span class="sub">每条只出现一次</span>
+      </div>
+      <ul class="news-list">
+        <li><a href="/#analysis">修复单元片源来源说明更新</a><span class="src">11月5日 · 片源组</span>新增1998年《庙街旧事》的胶片扫描规格：4K、24fps、保留原始颗粒，未做降噪。</li>
+        <li><a href="/#channels">华语剧场子分类命名统一</a><span class="src">11月6日 · 频道维护</span>原「修复专区」「经典重修」两种写法统一成「修复单元」，涉及标签37处。</li>
+        <li><a href="/#guide">播放器兼容性记录扩展到4条</a><span class="src">10月31日 · 体验组</span>补充iPad分屏模式下进度条隐藏的复现条件，需横屏且亮度自动调节开启。</li>
+      </ul>
+    </section>
+
+    <section class="block" id="recommend">
+      <div class="block-head">
+        <h2>相关推荐：你可能接着搜的词</h2>
+        <span class="sub">按近期搜索频次排列</span>
+      </div>
+      <div class="rec-tags">
+        <a href="/#channels">港剧修复版入口</a>
+        <a href="/#channels">华语剧场修复单元</a>
+        <a href="/#latest">雾港十年第二季更新时间</a>
+        <a href="/#picks">周末厨房第九季剪辑说明</a>
+        <a href="/#picks">沿着海岸线拍摄许可编号</a>
+        <a href="/#guide">手机画中画按钮在哪</a>
+        <a href="/#faq">收藏夹旧链接跳转</a>
+        <a href="/#analysis">搜索排序修复版优先</a>
+      </div>
+    </section>
+
+    <section class="block" id="ranking">
+      <div class="block-head">
+        <h2>本周评分榜：第45周结算</h2>
+        <span class="sub">11月8日结算，有效样本2143份</span>
+      </div>
+      <ol class="rank">
+        <li><a href="/#picks">雾港十年 第二季</a><span class="score">8.7 分 · 412份</span></li>
+        <li><a href="/#picks">庙街旧事 1998修复版</a><span class="score">8.5 分 · 388份</span></li>
+        <li><a href="/#picks">沿着海岸线 第三集</a><span class="score">8.3 分 · 267份</span></li>
+        <li><a href="/#picks">周末厨房 第9季</a><span class="score">7.9 分 · 501份</span></li>
+        <li><a href="/#channels">大城小事 重制版</a><span class="score">7.4 分 · 216份</span></li>
+      </ol>
+    </section>
+
+  </main>
+
+  <aside class="sidebar" aria-label="侧栏导航">
+    <div class="side-inner">
+      <div class="side-card side-nav">
+        <h2>板块导航</h2>
+        <ul>
+          <li><a href="/#overview">板块概览</a></li>
+          <li><a href="/#picks">精选推荐</a></li>
+          <li><a href="/#latest">最新更新</a></li>
+          <li><a href="/#channels">分类入口</a></li>
+          <li><a href="/#analysis">深度解析</a></li>
+          <li><a href="/#guide">体验指南</a></li>
+          <li><a href="/#faq">常见问答</a></li>
+          <li><a href="/#comments">用户评论</a></li>
+          <li><a href="/#news">相关资讯</a></li>
+          <li><a href="/#recommend">相关推荐</a></li>
+          <li><a href="/#ranking">本周评分榜</a></li>
+        </ul>
+      </div>
+      <div class="side-card">
+        <h2>表内状态</h2>
+        <p class="side-fact"><b>36</b> 个在列频道</p>
+        <p class="side-fact"><b>214</b> 条可检索条目</p>
+        <p class="side-fact">收藏同步完成率 <b>63.4%</b></p>
+        <p class="side-fact">旧入口保留至 <b>12月6日</b></p>
+      </div>
+      <div class="side-card">
+        <h2>常用入口</h2>
+        <ul class="side-links">
+          <li><a href="/#channels">华语剧场 · 修复单元</a></li>
+          <li><a href="/#latest">11月6日频道表调整</a></li>
+          <li><a href="/#faq">收藏夹同步说明</a></li>
+          <li><a href="/#guide">播放器兼容性记录</a></li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <span class="brand">
+          <svg class="mark" width="34" height="34" viewBox="0 0 64 64" role="img" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="#e8b04b"/>
+            <rect x="11" y="17" width="42" height="30" rx="4" fill="#0f2540"/>
+            <polygon points="28,25 28,39 40,32" fill="#e8b04b"/>
+          </svg>
+          <span>91看页面版</span>
+        </span>
+        <p>频道表与条目索引按日期维护，修复版统一归入华语剧场，入口变化以公告条为准。</p>
+      </div>
+      <div class="foot-col">
+        <h3>频道分组</h3>
+        <ul>
+          <li><a href="/#channels">华语剧场</a></li>
+          <li><a href="/#channels">日韩综艺</a></li>
+          <li><a href="/#channels">纪录片纪行</a></li>
+          <li><a href="/#channels">动画剧场</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h3>内容板块</h3>
+        <ul>
+          <li><a href="/#analysis">深度解析</a></li>
+          <li><a href="/#guide">体验指南</a></li>
+          <li><a href="/#faq">常见问答</a></li>
+          <li><a href="/#ranking">本周评分榜</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h3>说明</h3>
+        <ul>
+          <li>剧集、评分与用户留言为示例数据，用于展示板块结构。</li>
+          <li>日期以2026年11月8日为参照，均在前30天内。</li>
+          <li>更新时间：11月8日，对应评分榜结算与最新更新板块条目。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-note">
+      <span>© 2026 91看页面版 · 示例内容，不构成播放入口承诺</span>
+      <span>频道表最近调整：2026-11-06</span>
+    </div>
+  </div>
+</footer>
+
+<button id="toTop" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  var menuBtn=document.getElementById('menuBtn');
+  var nav=document.getElementById('mainNav');
+  menuBtn.addEventListener('click',function(){
+    var open=nav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded',open?'true':'false');
+  });
+  nav.addEventListener('click',function(e){
+    if(e.target.tagName==='A' && window.matchMedia('(max-width:960px)').matches){
+      nav.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded','false');
+    }
+  });
+
+  var toTop=document.getElementById('toTop');
+  window.addEventListener('scroll',function(){
+    if(window.scrollY>480){toTop.classList.add('show');}else{toTop.classList.remove('show');}
+  },{passive:true});
+  toTop.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  var sections=[].slice.call(document.querySelectorAll('main section.block'));
+  var sideLinks=[].slice.call(document.querySelectorAll('.side-nav a'));
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var id=en.target.id;
+          sideLinks.forEach(function(a){
+            a.classList.toggle('active',a.getAttribute('href')==='/# '+id || a.getAttribute('href')==='#'+id);
+          });
+        }
+      });
+    },{rootMargin:'-120px 0px -60% 0px',threshold:0});
+    sections.forEach(function(s){obs.observe(s);});
+  }
+
+  var searchInput=document.getElementById('siteSearch');
+  var resultBox=document.getElementById('searchResult');
+  var index=[];
+  sections.forEach(function(s){
+    var h=s.querySelector('h2');
+    if(h){index.push({title:h.textContent.trim(),id:s.id});}
+    [].slice.call(s.querySelectorAll('h3,summary,.channel-tags a,.rec-tags a,.rank a')).forEach(function(t){
+      var txt=t.textContent.trim();
+      if(txt && txt.length<60){index.push({title:txt,id:s.id});}
+    });
+  });
+  var seen={};
+  index=index.filter(function(i){if(seen[i.title+i.id])return false;seen[i.title+i.id]=1;return true;});
+
+  function esc(str){return str.replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+  searchInput.addEventListener('input',function(){
+    var q=searchInput.value.trim();
+    if(!q){resultBox.classList.remove('show');resultBox.innerHTML='';return;}
+    var hits=index.filter(function(i){return i.title.toLowerCase().indexOf(q.toLowerCase())>-1;}).slice(0,8);
+    if(hits.length===0){
+      resultBox.innerHTML='<p>未找到「'+esc(q)+'」，试试题材词，如港剧、纪录片、综艺。</p>';
+    }else{
+      resultBox.innerHTML=hits.map(function(i){
+        return '<a href="/#'+i.id+'">'+esc(i.title)+'</a>';
+      }).join('');
+    }
+    resultBox.classList.add('show');
+  });
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('.search-box')){resultBox.classList.remove('show');}
+  });
+  searchInput.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){searchInput.value='';resultBox.classList.remove('show');}
+  });
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name":"91看页面版",
+  "description":"网页观看场景下的频道表与条目索引，按日期核对更新与入口变化。",
+  "inLanguage":"zh-CN"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {
+      "@type":"Question",
+      "name":"港剧修复专区为什么找不到了？",
+      "acceptedAnswer":{"@type":"Answer","text":"港剧修复专区在11月6日并入华语剧场，原214个条目改挂到子分类「修复单元」，旧入口跳转保留到12月6日。"}
+    },
+    {
+      "@type":"Question",
+      "name":"收藏的剧集点开是旧页面，怎么办？",
+      "acceptedAnswer":{"@type":"Answer","text":"2024年及以前收藏的条目同步完成率偏低，打开条目后重新点一次收藏即可指向新分类，旧记录会被覆盖。"}
+    },
+    {
+      "@type":"Question",
+      "name":"搜索剧名时修复版排在原版前面，能改吗？",
+      "acceptedAnswer":{"@type":"Answer","text":"11月6日起搜索规则优先展示修复版，原版下移一位，可按发行年份区分，修复版带「修复单元」标签。"}
+    },
+    {
+      "@type":"Question",
+      "name":"《周末厨房》第14期的剪辑顺序争议是怎么回事？",
+      "acceptedAnswer":{"@type":"Answer","text":"节目组11月3日说明，第14期先播10月19日场，后播10月18日场，并附两场录制日期与流程单编号。"}
+    },
+    {
+      "@type":"Question",
+      "name":"纪录片纪行里的拍摄许可编号在哪看？",
+      "acceptedAnswer":{"@type":"Answer","text":"《沿着海岸线》片尾新增拍摄信息栏，列出许可编号与三个取样点坐标，首批回填8集。"}
+    },
+    {
+      "@type":"Question",
+      "name":"手机上播放器画中画按钮不出现？",
+      "acceptedAnswer":{"@type":"Answer","text":"iOS 17下Safari需先进入全屏再退出一次；Chrome 130安卓端按钮位于控制条右侧第三位，差异来自浏览器实现。"}
+    }
+  ]
+}
+</script>
+</body>
+                  </html>
